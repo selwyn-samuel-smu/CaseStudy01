@@ -1,0 +1,178 @@
+---
+title: "Case Study 1"
+author: "Brook Andreas"
+date: "June 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+Introduction about the project 
+
+### This project is analytical study of beer and breweries distribution across the united states and their corresponding alcholic content and bittterness level 
+
+##End Client : Zamy pharmaceutical
+
+### Zamy pharmaceutical is working on a project in designing hangover pills targeting after beer headaches and mood swings and wanted to study the alcohol content of beers sold in the united states , the chemical metrics of bitterness and alcohol content and target what threshold of alcohol content can be subdued by the supposed after beer pill. It's a preliminary study used as an input of zany's chemists to design multi layer and multiple dose pills depending on average alcohol consumption and mean distribution 
+
+### The Beers dataset contains a list of 2410 US craft beers and Breweries dataset contains 558 US breweries. The datasets descriptions are as follows.
+
+###Beers.csv:Attributes
+
+####Name: Name of the beer.
+####Beer_ID: Unique identifier of the beer.
+####ABV: Alcohol by volume of the beer.
+####IBU: International Bitterness Units of the beer.
+####Brewery_ID: Brewery id associated with the beer.
+####Style: Style of the beer.
+####Ounces: Ounces of beer.
+
+###Breweries.csv:Attributes
+
+####Brew_ID: Unique identifier of the brewery.
+####Name: Name of the brewery.
+####City: City where the brewery is located.
+####State: U.S. State where the brewery is located.
+
+
+```{r }
+library(repmis)
+library(RCurl)
+## The following R code downloads the datasets from a secure github website and load it to the satging area, In this case , default R working directory in my machine.
+getwd()
+setwd()
+site <- "https://github.com/selwyn-samuel-smu/CaseStudy01/blob/master/Beers.csv"
+download.file(site,destfile ="./Beers.csv ")
+Beers <- read.csv('C:\\Users\\brook\\Documents\\Beers.csv')
+list.files()
+str(Beers)
+dim(Beers)
+names(Beers)
+
+
+site <- "https://github.com/selwyn-samuel-smu/CaseStudy01/blob/master/Breweries.csv"
+download.file(site,destfile ="./Breweries.csv ")
+Breweries<- read.csv('C:\\Users\\brook\\Documents\\Beers.csv')
+list.files()
+
+Str(Breweries)
+dim(Breweries)
+names(Breweries)
+```
+### How many breweries are present in each state?
+```{r}
+Brewery_count <- as.data.frame(table((Breweries$State)))
+```
+### This code agregates the number of breweries in each state and delivers a data frame of State Name with the total count.
+
+
+## Merged file of two CSV who do share common coloumn values but different name and different coloumn count.The code merges the longer dataframe first and the shorter one second.The row count is expected to be the same as the longer table while the coloum count will be the same the sum of the coloumn counts of each table plus an additional coloumn,To include all rows, We set all=TRUE. To include all rows from the first table, but not unmatched rows from the second, set all.x=TRUE; (the cells from columns in the unmatched row of the second table will be set to NA). (all.y=TRUE is also legitimate).
+
+```{r}
+Merged_file <-merge(Beers, Breweries, by="row.names", all.x=TRUE)
+dim(Merged_file)
+head(Merged_file)
+tail(Merged_file)
+## This code will print the first 6 and last 6 elements of the data set 
+Breweries$Brew_ID
+table(Beers$Brewery_id)
+sort(table(Beers$Brewery_id))
+## The code above compares the same coloumn ID with different header names 
+```
+
+
+### Report the number of NA's in each column.
+```{r}
+sapply(X = Breweries, FUN = function(x) sum(is.na(x)))
+apply(Breweries, 2, function(x) length(which(is.na(x))))
+
+sapply(X = Beers, FUN = function(x) sum(is.na(x)))
+apply(Beers, 2, function(x) length(which(is.na(x))))
+```
+### The above  code uses the input data as a data frame and creates a function using sapply or apply aggregates and create a count of each coloumn that involves is.na=true. we can also count the non NA value by applying !is.na(x).adding the is.na and !is.na  should give the same values of dim(Breweries) or dim(Beers) coloumn count.
+```{r}
+apply(Beers, 2, function(x) length(which(is.na(x))))
+apply(Beers, 2, function(x) length(which(!is.na(x))))
+a <- apply(Beers, 2, function(x) length(which(is.na(x))))
+b <-apply(Beers, 2, function(x) length(which(!is.na(x))))
+a+b
+dim(Beers)
+```
+```{r}
+# calculates the median alchool content across all beer brands
+median(Beers$ABV,na.rm = TRUE)
+
+# calculates the median international bitterness unit for each state
+median(Beers$IBU,na.rm = TRUE)
+
+
+```
+###
+Compute the median alcohol content and international
+bitterness unit for each state. Plot a bar chart to compare.
+
+```{r}
+
+plot(Beers$IBU,Beers$ABV,main="Beer Alcohol Content and Bitterness level contrast",col="blue", xlim=c(0,150),ylim = c(0,0.13))
+
+scatterplot3d(Beers$Beer_ID, Beers$ABV,Beers$IBU,main="Beer Alcohol Content and Bitterness level contrast",xlab = "Beer_ID", xlim =c(0,2500),ylab = "ABV",ylim=c(0,0.13),zlab = "IBU " ,angle = 55,pch = 16, color="steelblue")
+
+length(Beers$Beer_ID[!is.na(Beers$Beer_ID)])
+
+```
+### Which state has the maximum alcoholic (ABV) beer? Which
+state has the most bitter (IBU) beer?
+
+```{r}
+max(Beers$ABV,na.rm = TRUE)
+min(Beers$ABV,na.rm = TRUE)
+
+max(Beers$IBU,na.rm = TRUE)
+min(Beers$IBU,na.rm = TRUE)
+```
+### using indexing in r or using SQL library  
+```{r}
+
+names(Beers)
+names(Breweries)
+Beers$Beer_ID
+Beers$Brewery_id
+Breweries$Brew_ID
+### Hence based on the vector comparison the coloumn names Brewery_ID and Brew_ID are the common coloumns where the data frame merge or join is done
+
+library(sqldf)
+sqldf("SELECT MAX(ABV)from Beers")
+sqldf("SELECT Name, Brewery_id FROM Beers WHERE ABV=0.128")
+sqldf("SELECT State FROM Breweries WHERE Brew_id=52")
+## or we can use nested SQL indexing 
+sqldf("SELECT State FROM Breweries WHERE Brew_id=(SELECT Brewery_id FROM Beers WHERE ABV=(SELECT MAX(ABV)from Beers))")
+## Hence the state with higher alcohol beer is Colorado
+
+## To calculate the state with the state with the most bitter beer 
+max(Beers$IBU,na.rm = TRUE)
+library(sqldf)
+sqldf("SELECT MAX(IBU)from Beers")
+sqldf("SELECT Name, Brewery_id FROM Beers WHERE IBU=138")
+sqldf("SELECT State FROM Breweries WHERE Brew_id=375")
+## or we can use nested SQL indexing 
+sqldf("SELECT State FROM Breweries WHERE Brew_id=(SELECT Brewery_id FROM Beers WHERE IBU=(SELECT MAX(IBU)from Beers))")
+## Hence based on the analysis Oregon has the most bitter Beer
+```
+
+###Summary statistics for the ABV variable.
+```{r}
+library(pastecs)
+stat.desc(Beers$ABV,BASIC=F)
+```
+### Is there an apparent relationship between the bitterness of the
+beer and its alcoholic content? Draw a scatter plot.
+
+```{r}
+plot(Beers$IBU,Beers$ABV,main="Beer Alcohol Content and Bitterness level contrast",col="blue",xlab="IBU", ylab="Alcholic Content per bottle", xlim=c(0,150),ylim = c(0,0.13))
+
+library(ggplot2)
+## Reference https://www.craftbeer.com/craft-beer-muses/craft-beer-by-the-numbers
+## It looks like there are other confounding varriables ,that can give a complete picture and I dont see a direct correlation between IBU and AbV
+```
