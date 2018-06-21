@@ -1,0 +1,121 @@
+
+##title: "CaseStudy1
+### DJ's Contribution
+
+#### Installing  dplyr and ggplot functions
+
+
+```{r}
+install.packages("dplyr",repos = "http://cran.us.r-project.org")
+install.packages("ggplot2",repos = "http://cran.us.r-project.org")
+
+```
+### Reading the Beer Data from Repo created by 
+
+```{r}
+URL <- "https://github.com/selwyn-samuel-smu/CaseStudy01/"
+temp <- tempfile()
+download.file(URL,temp)
+
+```
+### Reading the Breweries.csv file from the repo
+
+```{r}
+brewer <- read.csv("Breweries.csv",header = TRUE)  # read csv file
+head(brewer)
+
+```
+
+### Check the dim,names and str
+
+```{r}
+dim(brewer)
+names(brewer)
+str(brewer)
+
+```
+
+### Reading the Beers.csv file from the repo
+
+```{r}
+beers <- read.csv("Beers.csv",header = TRUE)  # read csv file
+head(beers)
+
+```
+### Checkinh the dim,names and str
+
+```{r}
+dim(beers)
+names(beers)
+str(beers)
+
+```
+```{r}
+brewer
+```
+### Checking the data structure of column name and state
+```{r}
+is.factor(brewer$State)
+is.factor(brewer$Name)
+```
+### Converting the state to a factor and 
+### Creating a data frame brewer.Name and brewer.state
+```{r}
+State = as.factor(brewer$State)
+Data1 <- data.frame(brewer$Name, brewer$State)
+Data1
+```
+
+###Question: 1 How many breweries are present in each state?
+
+```{r}
+library(dplyr)
+Data1 %>%  group_by(brewer.State) %>% summarise(brewer.Name_count =n())
+
+```
+
+
+### Question 2 Merging Data Sets
+
+```{r}
+beer_data <- merge(brewer,beers, by = "Brewery_id","Brew_ID")
+beer_data
+head(beer_data)
+
+```
+
+##Q3 - Number of NA's in each colunm
+
+```{r}
+ sapply(beer_data,function(x) sum(is.na(x)))
+
+```
+
+
+## question 4 Part 1 -ompute the median alchohol content and international bitterness unit of each srate. Plot a bar chart to compare
+```{r}
+Data3 <- data.frame(beer_data$State, beer_data$ABV,beer_data$IBU)
+library(dplyr)
+Data3 %>%  group_by(beer_data.State) %>% summarise(median(beer_data.ABV),median(beer_data.IBU))
+Data3
+```
+### Removing the NA from the data set
+
+```{r}
+
+Data3 <- na.omit(Data3)
+Data3
+
+```
+
+
+```{r}
+str(Data4)
+
+```
+
+
+
+
+
+
