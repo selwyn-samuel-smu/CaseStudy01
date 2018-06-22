@@ -41,23 +41,21 @@ Introduction about the project
 library(repmis)
 library(RCurl)
 ## The following R code downloads the datasets from a secure github website and load it to the satging area, In this case , default R working directory in my machine.
-getwd()
-setwd()
-site <- "https://github.com/selwyn-samuel-smu/CaseStudy01/blob/master/Beers.csv"
+site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Beers.csv"
 download.file(site,destfile ="./Beers.csv ")
-Beers <- read.csv('C:\\Users\\brook\\Documents\\Beers.csv')
+Beers <- read.csv(site)
 list.files()
 str(Beers)
 dim(Beers)
 names(Beers)
 
 
-site <- "https://github.com/selwyn-samuel-smu/CaseStudy01/blob/master/Breweries.csv"
+site2 <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv"
 download.file(site,destfile ="./Breweries.csv ")
-Breweries<- read.csv('C:\\Users\\brook\\Documents\\Beers.csv')
+Breweries<- read.csv(site2)
 list.files()
 
-Str(Breweries)
+str(Breweries)
 dim(Breweries)
 names(Breweries)
 ```
