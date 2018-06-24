@@ -1,6 +1,6 @@
 ---
 title: "Case Study 1"
-author: "Brook Andreas"
+author: "Brook Andreas, Nicol Henderson Kuns, Selwyn Samuel, DJ"
 date: "June 17, 2018"
 output: html_document
 ---
