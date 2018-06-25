@@ -40,20 +40,21 @@ Introduction about the project
 ```{r }
 library(repmis)
 library(RCurl)
+
 ## The following R code downloads the datasets from a secure github website and load it to the satging area, In this case , default R working directory in my machine.
 site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Beers.csv"
-download.file(site,destfile ="./Beers.csv ")
+#download.file(site,destfile ="./Beers.csv ") - Selwyn - Commented the code as we do not need to download to local disk
 Beers <- read.csv(site)
-list.files()
+#list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 str(Beers)
 dim(Beers)
 names(Beers)
 
 
 site2 <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv"
-download.file(site,destfile ="./Breweries.csv ")
+#download.file(site,destfile ="./Breweries.csv ") - Selwyn - Commented the code as we do not need to download the file to local disk
 Breweries<- read.csv(site2)
-list.files()
+#list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 
 str(Breweries)
 dim(Breweries)
@@ -62,6 +63,7 @@ names(Breweries)
 ### How many breweries are present in each state?
 ```{r}
 Brewery_count <- as.data.frame(table((Breweries$State)))
+Brewery_count #Selwyn - Added to print the breweries by State
 ```
 ### This code agregates the number of breweries in each state and delivers a data frame of State Name with the total count.
 
@@ -112,6 +114,7 @@ Compute the median alcohol content and international
 bitterness unit for each state. Plot a bar chart to compare.
 
 ```{r}
+library(scatterplot3d) # Selwyn - Added library
 
 plot(Beers$IBU,Beers$ABV,main="Beer Alcohol Content and Bitterness level contrast",col="blue", xlim=c(0,150),ylim = c(0,0.13))
 
@@ -162,7 +165,8 @@ sqldf("SELECT State FROM Breweries WHERE Brew_id=(SELECT Brewery_id FROM Beers W
 ###Summary statistics for the ABV variable.
 ```{r}
 library(pastecs)
-stat.desc(Beers$ABV,BASIC=F)
+#stat.desc(Beers$ABV,BASIC=F) -Selwyn (Removed BASIC=F as it was giving an error "Unused argument")
+stat.desc(Beers$ABV)
 ```
 ### Is there an apparent relationship between the bitterness of the
 beer and its alcoholic content? Draw a scatter plot.
