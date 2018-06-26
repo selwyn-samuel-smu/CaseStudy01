@@ -23,6 +23,7 @@ The study team was given a set of data about the beers and the breweries. As par
 ```{r }
 library(repmis)
 library(RCurl)
+library(knitr)
 
 #
 # Read the Beers & Breweries CSV files from the github URL. We use the RAW URL to read the CSV file's content properly.
@@ -62,7 +63,7 @@ $~$
 Breweries$State <- trimws(Breweries$State)
 
 #
-# 2. Add State Name to the data frame. The one with NA is Wahington DC
+# 2. Add State Name to the data frame. The one with NA is Washington DC
 #
 Breweries$StateName <- state.name[match(as.character(Breweries$State), state.abb)]
 Breweries$StateName[Breweries$State == "DC"] <- "Washington DC"
@@ -71,20 +72,22 @@ Breweries$StateName[Breweries$State == "DC"] <- "Washington DC"
 
 ###Question: 1. How many breweries are present in each state?
 
-One of the first tasks for the team is to analyze the distribution of Breweries across various states in the US. The data contained information about all 50 states and also Washington DC. 
+One of the first tasks for the team is to analyze the distribution of Breweries across various states in the US. The data contained information about all 50 states and also Washington DC. The following table shows the number of breweries by state arranged by alphabetical order of the state names.
 
 ```{r}
 
 #
 # We use the table function to let R do most of the work for us.
-# We coerce the result to a dataframe so that we can get a prettier print by state.
+# We coerce the result to a dataframe so that we can get a prettier print by state. We added column names for the result.
 #
 
 Brewery_count <- as.data.frame(table((Breweries$StateName)))
 names(Brewery_count) <- c("State", "Number of Breweries")
 
-# Print the breweries by State
-Brewery_count
+#
+# Print the breweries by State 
+#
+kable(Brewery_count, format="html", caption="Breweries count by State")
 
 ```
 

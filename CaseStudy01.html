@@ -138,7 +138,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(repmis)
 library(RCurl)</code></pre>
 <pre><code>## Loading required package: bitops</code></pre>
-<pre class="r"><code>#
+<pre class="r"><code>library(knitr)
+
+#
 # Read the Beers &amp; Breweries CSV files from the github URL. We use the RAW URL to read the CSV file's content properly.
 # After reading the file, run a few funcstions to check the structure and data content to verify if we read the files 
 # properly.
@@ -195,7 +197,7 @@ Breweries$StateName[Breweries$State == &quot;DC&quot;] &lt;- &quot;Washington DC
 </div>
 <div id="question-1.-how-many-breweries-are-present-in-each-state" class="section level3">
 <h3>Question: 1. How many breweries are present in each state?</h3>
-<p>One of the first tasks for the team is to analyze the distribution of Breweries across various states in the US. The data contained information about all 50 states and also Washington DC.</p>
+<p>One of the first tasks for the team is to analyze the distribution of Breweries across various states in the US. The data contained information about all 50 states and also Washington DC. The following table shows the number of breweries by state arranged by alphabetical order of the state names.</p>
 <pre class="r"><code>#
 # We use the table function to let R do most of the work for us.
 # We coerce the result to a dataframe so that we can get a prettier print by state.
@@ -205,62 +207,433 @@ Brewery_count &lt;- as.data.frame(table((Breweries$StateName)))
 names(Brewery_count) &lt;- c(&quot;State&quot;, &quot;Number of Breweries&quot;)
 
 # Print the breweries by State
-Brewery_count</code></pre>
-<pre><code>##             State Number of Breweries
-## 1         Alabama                   3
-## 2          Alaska                   7
-## 3         Arizona                  11
-## 4        Arkansas                   2
-## 5      California                  39
-## 6        Colorado                  47
-## 7     Connecticut                   8
-## 8        Delaware                   2
-## 9         Florida                  15
-## 10        Georgia                   7
-## 11         Hawaii                   4
-## 12          Idaho                   5
-## 13       Illinois                  18
-## 14        Indiana                  22
-## 15           Iowa                   5
-## 16         Kansas                   3
-## 17       Kentucky                   4
-## 18      Louisiana                   5
-## 19          Maine                   9
-## 20       Maryland                   7
-## 21  Massachusetts                  23
-## 22       Michigan                  32
-## 23      Minnesota                  12
-## 24    Mississippi                   2
-## 25       Missouri                   9
-## 26        Montana                   9
-## 27       Nebraska                   5
-## 28         Nevada                   2
-## 29  New Hampshire                   3
-## 30     New Jersey                   3
-## 31     New Mexico                   4
-## 32       New York                  16
-## 33 North Carolina                  19
-## 34   North Dakota                   1
-## 35           Ohio                  15
-## 36       Oklahoma                   6
-## 37         Oregon                  29
-## 38   Pennsylvania                  25
-## 39   Rhode Island                   5
-## 40 South Carolina                   4
-## 41   South Dakota                   1
-## 42      Tennessee                   3
-## 43          Texas                  28
-## 44           Utah                   4
-## 45        Vermont                  10
-## 46       Virginia                  16
-## 47     Washington                  23
-## 48  Washington DC                   1
-## 49  West Virginia                   1
-## 50      Wisconsin                  20
-## 51        Wyoming                   4</code></pre>
-</div>
-<div id="this-code-agregates-the-number-of-breweries-in-each-state-and-delivers-a-data-frame-of-state-name-with-the-total-count." class="section level3">
-<h3>This code agregates the number of breweries in each state and delivers a data frame of State Name with the total count.</h3>
+kable(Brewery_count, format=&quot;html&quot;, caption=&quot;Breweries count by State&quot;)</code></pre>
+<table>
+<caption>
+Breweries count by State
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+State
+</th>
+<th style="text-align:right;">
+Number of Breweries
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Alabama
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alaska
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arizona
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arkansas
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+California
+</td>
+<td style="text-align:right;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Colorado
+</td>
+<td style="text-align:right;">
+47
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Connecticut
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delaware
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Florida
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Georgia
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hawaii
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Idaho
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Illinois
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Indiana
+</td>
+<td style="text-align:right;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Iowa
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kansas
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kentucky
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Louisiana
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maine
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maryland
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Massachusetts
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Michigan
+</td>
+<td style="text-align:right;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Minnesota
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mississippi
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Missouri
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Montana
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nebraska
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nevada
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Hampshire
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Jersey
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Mexico
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New York
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+North Carolina
+</td>
+<td style="text-align:right;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+North Dakota
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ohio
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oklahoma
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Oregon
+</td>
+<td style="text-align:right;">
+29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pennsylvania
+</td>
+<td style="text-align:right;">
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rhode Island
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+South Carolina
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+South Dakota
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tennessee
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+28
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Utah
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vermont
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Virginia
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Washington DC
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+West Virginia
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wisconsin
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wyoming
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(~\)</span></p>
 </div>
 </div>
 <div id="merged-file-of-two-csv-who-do-share-common-coloumn-values-but-different-name-and-different-coloumn-count.the-code-merges-the-longer-dataframe-first-and-the-shorter-one-second.the-row-count-is-expected-to-be-the-same-as-the-longer-table-while-the-coloum-count-will-be-the-same-the-sum-of-the-coloumn-counts-of-each-table-plus-an-additional-coloumnto-include-all-rows-we-set-alltrue.-to-include-all-rows-from-the-first-table-but-not-unmatched-rows-from-the-second-set-all.xtrue-the-cells-from-columns-in-the-unmatched-row-of-the-second-table-will-be-set-to-na.-all.ytrue-is-also-legitimate." class="section level2">
