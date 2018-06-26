@@ -93,17 +93,38 @@ kable(Brewery_count, format="html", caption="Breweries count by State")
 
 $~$
 
-## Merged file of two CSV who do share common coloumn values but different name and different coloumn count.The code merges the longer dataframe first and the shorter one second.The row count is expected to be the same as the longer table while the coloum count will be the same the sum of the coloumn counts of each table plus an additional coloumn,To include all rows, We set all=TRUE. To include all rows from the first table, but not unmatched rows from the second, set all.x=TRUE; (the cells from columns in the unmatched row of the second table will be set to NA). (all.y=TRUE is also legitimate).
+###Question: 2. Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.
+
+One of the challenges the team faced was the data about the Beers and Breweries were available in two separate files. Upon further analyzing the two files, the team found out that there was a common column that connected both the files. In the Beers file, there was a column "Brewery_id" that matched up with the "Brew_ID" column in the Breweries file. 
+
+The team decided to merge both the files to provide a single file that can be useful in viewing the Beers and the corresponding Breweries in the same data.
 
 ```{r}
-Merged_file <-merge(Beers, Breweries, by="row.names", all.x=TRUE)
-dim(Merged_file)
-head(Merged_file)
-tail(Merged_file)
+
+#
+# Use the merge function with the Brewery_id and Brew_ID
+#
+
+#Merged_file <-merge(Beers, Breweries, by="row.names", all.x=TRUE) - Code replaced with merging the IDs
+
+Beers.Breweries <- merge(Beers, Breweries, by.x = 'Brewery_id', by.y = 'Brew_ID')
+
+#Change the column names
+names(Beers.Breweries) <- c("Brewery_id", "Beer", "Beer_ID", "ABV", "IBU", "Style", "Ounces", "Brewery", "City", "State", "State Name")
+
+# Print the dimensions of the merged data
+dim(Beers.Breweries)
+
+#Print the first 6 records
+kable(head(Beers.Breweries))
+
+#Print the last 6 records
+kable(tail(Beers.Breweries))
+
 ## This code will print the first 6 and last 6 elements of the data set 
-Breweries$Brew_ID
-table(Beers$Brewery_id)
-sort(table(Beers$Brewery_id))
+#Breweries$Brew_ID
+#table(Beers$Brewery_id)
+#sort(table(Beers$Brewery_id))
 ## The code above compares the same coloumn ID with different header names 
 ```
 
