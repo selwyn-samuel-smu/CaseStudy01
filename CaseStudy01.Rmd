@@ -15,33 +15,23 @@ Introduction about the project
 
 ##End Client : Zamy pharmaceutical
 
-### Zamy pharmaceutical is working on a project in designing hangover pills targeting after beer headaches and mood swings and wanted to study the alcohol content of beers sold in the united states , the chemical metrics of bitterness and alcohol content and target what threshold of alcohol content can be subdued by the supposed after beer pill. It's a preliminary study used as an input of zany's chemists to design multi layer and multiple dose pills depending on average alcohol consumption and mean distribution 
+### Zamy pharmaceutical is working on a project in designing hangover pills targeting after beer headaches and mood swings and wanted to study the alcohol content of beers sold in the united states, the chemical metrics of bitterness and alcohol content and target what threshold of alcohol content can be subdued by the supposed after beer pill. It's a preliminary study used as an input of zany's chemists to design multi layer and multiple dose pills depending on average alcohol consumption and mean distribution.
 
-### The Beers dataset contains a list of 2410 US craft beers and Breweries dataset contains 558 US breweries. The datasets descriptions are as follows.
-
-###Beers.csv:Attributes
-
-####Name: Name of the beer.
-####Beer_ID: Unique identifier of the beer.
-####ABV: Alcohol by volume of the beer.
-####IBU: International Bitterness Units of the beer.
-####Brewery_ID: Brewery id associated with the beer.
-####Style: Style of the beer.
-####Ounces: Ounces of beer.
-
-###Breweries.csv:Attributes
-
-####Brew_ID: Unique identifier of the brewery.
-####Name: Name of the brewery.
-####City: City where the brewery is located.
-####State: U.S. State where the brewery is located.
+The study team was given a set of data about the beers and the breweries. As part of the analysis the team studied the data from various angles to provide valuable insight into the data.
 
 
 ```{r }
 library(repmis)
 library(RCurl)
 
-## The following R code downloads the datasets from a secure github website and load it to the satging area, In this case , default R working directory in my machine.
+#
+# Read the Beers & Breweries CSV files from the github URL. We use the RAW URL to read the CSV file's content properly.
+# After reading the file, run a few funcstions to check the structure and data content to verify if we read the files 
+# properly.
+#
+# Originally we downloaded the file to the local directory but later with the help of Prof. Santerre we were able to 
+# read the raw files directly from the github URL. The original code to download to local directory is commented out.
+# 
 site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Beers.csv"
 #download.file(site,destfile ="./Beers.csv ") - Selwyn - Commented the code as we do not need to download to local disk
 Beers <- read.csv(site)
@@ -60,13 +50,45 @@ str(Breweries)
 dim(Breweries)
 names(Breweries)
 ```
-### How many breweries are present in each state?
-```{r}
-Brewery_count <- as.data.frame(table((Breweries$State)))
-Brewery_count #Selwyn - Added to print the breweries by State
-```
-### This code agregates the number of breweries in each state and delivers a data frame of State Name with the total count.
+$~$
 
+```{r}
+
+#
+# Clean up the data
+#
+# 1. The State codes have a space in the front. We can remove it.
+#
+Breweries$State <- trimws(Breweries$State)
+
+#
+# 2. Add State Name to the data frame. The one with NA is Wahington DC
+#
+Breweries$StateName <- state.name[match(as.character(Breweries$State), state.abb)]
+Breweries$StateName[Breweries$State == "DC"] <- "Washington DC"
+
+```
+
+###Question: 1. How many breweries are present in each state?
+
+One of the first tasks for the team is to analyze the distribution of Breweries across various states in the US. The data contained information about all 50 states and also Washington DC. 
+
+```{r}
+
+#
+# We use the table function to let R do most of the work for us.
+# We coerce the result to a dataframe so that we can get a prettier print by state.
+#
+
+Brewery_count <- as.data.frame(table((Breweries$StateName)))
+names(Brewery_count) <- c("State", "Number of Breweries")
+
+# Print the breweries by State
+Brewery_count
+
+```
+
+$~$
 
 ## Merged file of two CSV who do share common coloumn values but different name and different coloumn count.The code merges the longer dataframe first and the shorter one second.The row count is expected to be the same as the longer table while the coloum count will be the same the sum of the coloumn counts of each table plus an additional coloumn,To include all rows, We set all=TRUE. To include all rows from the first table, but not unmatched rows from the second, set all.x=TRUE; (the cells from columns in the unmatched row of the second table will be set to NA). (all.y=TRUE is also legitimate).
 
@@ -178,3 +200,22 @@ library(ggplot2)
 ## Reference https://www.craftbeer.com/craft-beer-muses/craft-beer-by-the-numbers
 ## It looks like there are other confounding varriables ,that can give a complete picture and I dont see a direct correlation between IBU and AbV
 ```
+
+### The Beers dataset contains a list of 2410 US craft beers and Breweries dataset contains 558 US breweries. The datasets descriptions are as follows.
+
+###Beers.csv:Attributes
+
+####Name: Name of the beer.
+####Beer_ID: Unique identifier of the beer.
+####ABV: Alcohol by volume of the beer.
+####IBU: International Bitterness Units of the beer.
+####Brewery_ID: Brewery id associated with the beer.
+####Style: Style of the beer.
+####Ounces: Ounces of beer.
+
+###Breweries.csv:Attributes
+
+####Brew_ID: Unique identifier of the brewery.
+####Name: Name of the brewery.
+####City: City where the brewery is located.
+####State: U.S. State where the brewery is located.
