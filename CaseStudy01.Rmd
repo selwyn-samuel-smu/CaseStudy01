@@ -37,7 +37,7 @@ site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/
 localsite <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Beers.csv"
   
 #download.file(site,destfile ="./Beers.csv ") - Selwyn - Commented the code as we do not need to download to local disk
-Beers <- read.csv(localsite)
+Beers <- read.csv(site)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 str(Beers)
 dim(Beers)
@@ -47,7 +47,7 @@ names(Beers)
 site2 <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv"
 localsite2 <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Breweries.csv"
 #download.file(site,destfile ="./Breweries.csv ") - Selwyn - Commented the code as we do not need to download the file to local disk
-Breweries<- read.csv(localsite2)
+Breweries<- read.csv(site2)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 
 str(Breweries)
@@ -193,13 +193,14 @@ ibu.table <- setDT(states.medians[, c(1, 3)])
 
 par(mar=c(7, 5, 1, 0))
 barplot(ibu.table$IBU[1:27] , border=F , names.arg=ibu.table$StateName[1:27], las=2, ylim=c(0,65), xlim=c(0, 40), width=1.5, main="Median IBU by State", col="green", ylab="IBU")
-barplot(ibu.table$IBU[28:51] , border=F , names.arg=ibu.table$StateName[28:51], las=2, ylim=c(0,65), xlim=c(0, 40), width=1.5, main="Median IBU by State", col="green", ylab="IBU")
+barplot(ibu.table$IBU[28:51] , border=F , names.arg=ibu.table$StateName[28:51], las=2, ylim=c(0,65), xlim=c(0, 40), width=1.5, main="Median IBU by State (Continued)", col="green", ylab="IBU")
 
 abvp.table <- setDT(states.medians[, c(1, 2)])
 
 barplot(abvp.table$ABV[1:27] , border=F , names.arg=ibu.table$StateName[1:27], las=2, ylim=c(0,0.07), xlim=c(0, 40), width=1.5, main="Median ABV% by State", col="blue", ylab="ABV %")
-barplot(abvp.table$ABV[28:51] , border=F , names.arg=ibu.table$StateName[28:51], las=2, ylim=c(0,0.07), xlim=c(0, 40), width=1.5, main="Median ABV% by State", col="blue", ylab="ABV %")
+barplot(abvp.table$ABV[28:51] , border=F , names.arg=ibu.table$StateName[28:51], las=2, ylim=c(0,0.07), xlim=c(0, 40), width=1.5, main="Median ABV% by State (Continued)", col="blue", ylab="ABV %")
 ```
+
 
 
 ```{r}
