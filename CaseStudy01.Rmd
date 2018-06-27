@@ -278,11 +278,14 @@ $~$
 
 ###Question: 6. Summary statistics for the ABV variable
 
+One of the goals of the study group is to find more information about the alchohol by volume charateristic of all the beers that are sold in all the states. The team leveraged the built-in functions in R language to highlight the various aspects of the ABV characteristics.
+
 ```{r}
 library(pastecs)
 #stat.desc(Beers$ABV,BASIC=F) -Selwyn (Removed BASIC=F as it was giving an error "Unused argument")
-stat.desc(Beers$ABV)
-summary(Beers$ABV)
+ss <- stat.desc(Beers$ABV)
+names(ss) <- c("Number of Values", "Number of Null values", "Number of NAs", "Minimum", "Maximum", "Range", "Sum", "Median", "Mean", "Standard Error", "95% Confidence Interval", "Variance", "Standard Deviation", "Coefficient of Variance")
+kable(ss, caption="Summary Statistics for Alcohol by Volume", col.names = "Value")
 ```
 
 

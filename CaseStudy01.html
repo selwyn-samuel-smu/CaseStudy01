@@ -1197,6 +1197,7 @@ sqldf(&quot;SELECT State FROM Breweries WHERE Brew_id=(SELECT Brewery_id FROM Be
 </div>
 <div id="question-6.-summary-statistics-for-the-abv-variable" class="section level3">
 <h3>Question: 6. Summary statistics for the ABV variable</h3>
+<p>One of the goals of the study group is to find more information about the alchohol by volume charateristic of all the beers that are sold in all the states. The team leveraged the built-in functions in R language to highlight the various aspects of the ABV characteristics.</p>
 <pre class="r"><code>library(pastecs)</code></pre>
 <pre><code>## 
 ## Attaching package: 'pastecs'</code></pre>
@@ -1204,16 +1205,76 @@ sqldf(&quot;SELECT State FROM Breweries WHERE Brew_id=(SELECT Brewery_id FROM Be
 ## 
 ##     first, last</code></pre>
 <pre class="r"><code>#stat.desc(Beers$ABV,BASIC=F) -Selwyn (Removed BASIC=F as it was giving an error &quot;Unused argument&quot;)
-stat.desc(Beers$ABV)</code></pre>
-<pre><code>##      nbr.val     nbr.null       nbr.na          min          max 
-## 2.348000e+03 0.000000e+00 6.200000e+01 1.000000e-03 1.280000e-01 
-##        range          sum       median         mean      SE.mean 
-## 1.270000e-01 1.403480e+02 5.600000e-02 5.977342e-02 2.794636e-04 
-## CI.mean.0.95          var      std.dev     coef.var 
-## 5.480212e-04 1.833786e-04 1.354173e-02 2.265511e-01</code></pre>
-<pre class="r"><code>summary(Beers$ABV)</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-## 0.00100 0.05000 0.05600 0.05977 0.06700 0.12800      62</code></pre>
+ss &lt;- stat.desc(Beers$ABV)
+names(ss) &lt;- c(&quot;Number of Values&quot;, &quot;Number of Null values&quot;, &quot;Number of NAs&quot;, &quot;Minimum&quot;, &quot;Maximum&quot;, &quot;Range&quot;, &quot;Sum&quot;, &quot;Median&quot;, &quot;Mean&quot;, &quot;Standard Error&quot;, &quot;95% Confidence Interval&quot;, &quot;Variance&quot;, &quot;Standard Deviation&quot;, &quot;Coefficient of Variance&quot;)
+kable(ss, caption=&quot;Summary Statistics for Alcohol by Volume&quot;, col.names = &quot;Value&quot;)</code></pre>
+<table>
+<caption>Summary Statistics for Alcohol by Volume</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Number of Values</td>
+<td align="right">2348.0000000</td>
+</tr>
+<tr class="even">
+<td>Number of Null values</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td>Number of NAs</td>
+<td align="right">62.0000000</td>
+</tr>
+<tr class="even">
+<td>Minimum</td>
+<td align="right">0.0010000</td>
+</tr>
+<tr class="odd">
+<td>Maximum</td>
+<td align="right">0.1280000</td>
+</tr>
+<tr class="even">
+<td>Range</td>
+<td align="right">0.1270000</td>
+</tr>
+<tr class="odd">
+<td>Sum</td>
+<td align="right">140.3480000</td>
+</tr>
+<tr class="even">
+<td>Median</td>
+<td align="right">0.0560000</td>
+</tr>
+<tr class="odd">
+<td>Mean</td>
+<td align="right">0.0597734</td>
+</tr>
+<tr class="even">
+<td>Standard Error</td>
+<td align="right">0.0002795</td>
+</tr>
+<tr class="odd">
+<td>95% Confidence Interval</td>
+<td align="right">0.0005480</td>
+</tr>
+<tr class="even">
+<td>Variance</td>
+<td align="right">0.0001834</td>
+</tr>
+<tr class="odd">
+<td>Standard Deviation</td>
+<td align="right">0.0135417</td>
+</tr>
+<tr class="even">
+<td>Coefficient of Variance</td>
+<td align="right">0.2265511</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>library(scatterplot3d) # Selwyn - Added library
 
 plot(Beers$IBU,Beers$ABV,main=&quot;Beer Alcohol Content and Bitterness level contrast&quot;,col=&quot;blue&quot;, xlim=c(0,150),ylim = c(0,0.13))</code></pre>
