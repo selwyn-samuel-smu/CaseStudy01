@@ -34,8 +34,10 @@ library(knitr)
 # read the raw files directly from the github URL. The original code to download to local directory is commented out.
 # 
 site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Beers.csv"
+localsite <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Beers.csv"
+  
 #download.file(site,destfile ="./Beers.csv ") - Selwyn - Commented the code as we do not need to download to local disk
-Beers <- read.csv(site)
+Beers <- read.csv(localsite)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 str(Beers)
 dim(Beers)
@@ -43,8 +45,9 @@ names(Beers)
 
 
 site2 <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv"
+localsite2 <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Breweries.csv"
 #download.file(site,destfile ="./Breweries.csv ") - Selwyn - Commented the code as we do not need to download the file to local disk
-Breweries<- read.csv(site2)
+Breweries<- read.csv(localsite2)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 
 str(Breweries)
@@ -91,6 +94,8 @@ kable(Brewery_count, format="html", caption="Breweries count by State")
 
 ```
 
+After looking at the number of breweries by state, we see Colorado topping the list with 47, followed by California (39) and Michigan (32). There are several states with just one brewery which can be surprising considering the beer consumption in the United States.
+
 $~$
 
 ###Question: 2. Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.
@@ -110,7 +115,7 @@ The team decided to merge both the files to provide a single file that can be us
 Beers.Breweries <- merge(Beers, Breweries, by.x = 'Brewery_id', by.y = 'Brew_ID')
 
 #Change the column names
-names(Beers.Breweries) <- c("Brewery_id", "Beer", "Beer_ID", "ABV", "IBU", "Style", "Ounces", "Brewery", "City", "State", "State Name")
+names(Beers.Breweries) <- c("Brewery_id", "Beer", "Beer_ID", "ABV", "IBU", "Style", "Ounces", "Brewery", "City", "State", "StateName")
 
 # Print the dimensions of the merged data
 dim(Beers.Breweries)
@@ -128,36 +133,74 @@ kable(tail(Beers.Breweries))
 ## The code above compares the same coloumn ID with different header names 
 ```
 
+After looking at the top 6 and bottom 6 rows of the merged data, we can see both the data merged properly by the brewery IDs. The output table is sorted by the brewery ID and we can the values of 1 at the top (first brewery ID) and 558 at the bottom (last brewery ID).
 
-### Report the number of NA's in each column.
-```{r}
-sapply(X = Breweries, FUN = function(x) sum(is.na(x)))
-apply(Breweries, 2, function(x) length(which(is.na(x))))
+$~$
 
-sapply(X = Beers, FUN = function(x) sum(is.na(x)))
-apply(Beers, 2, function(x) length(which(is.na(x))))
-```
-### The above  code uses the input data as a data frame and creates a function using sapply or apply aggregates and create a count of each coloumn that involves is.na=true. we can also count the non NA value by applying !is.na(x).adding the is.na and !is.na  should give the same values of dim(Breweries) or dim(Beers) coloumn count.
+###Question: 3. Report the number of NA's in each column.
+
+One of the key tasks for statisticians to do while working with data is to identify the missing values in all the columns. Some of the key statisfunctions do not behave well if the data contains null values. So the team decided to print out the NA values in all the columns of the merged data so that they can take appropriate actions when running the main statistics functions.
+
 ```{r}
-apply(Beers, 2, function(x) length(which(is.na(x))))
-apply(Beers, 2, function(x) length(which(!is.na(x))))
-a <- apply(Beers, 2, function(x) length(which(is.na(x))))
-b <-apply(Beers, 2, function(x) length(which(!is.na(x))))
-a+b
-dim(Beers)
+#sapply(X = Breweries, FUN = function(x) sum(is.na(x)))
+#apply(Breweries, 2, function(x) length(which(is.na(x))))
+
+#sapply(X = Beers, FUN = function(x) sum(is.na(x)))
+#apply(Beers, 2, function(x) length(which(is.na(x))))
+
+count.nas <- sapply(X = Beers.Breweries, FUN = function(x) sum(is.na(x)))
+count.nas <- as.data.frame(count.nas)
+names(count.nas) <- c("Number of NAs")
+kable(count.nas, format="html", caption = "Number of NAs for each column")
+
 ```
+$~$
+The displayed tables shows that the Alcohol By Volume (ABV) and International Bitterness Units (IBU) columns are the only ones that have the missing data. When we need to run statistics functions on these columns, we need to be aware of the missing columns and provide appropriate function parameters to handle missing data.
+
+$~$
+
+###Question: 4. Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
+
+Bar charts are widely used by statistians to compare exploratory variables and responses among various groups in the population of interest. The team decided to compare the median ABV and IBU for all the states using a bar chart to get an idea about the types of beers consumed by each state.
+
 ```{r}
 # calculates the median alchool content across all beer brands
-median(Beers$ABV,na.rm = TRUE)
+#median(Beers$ABV,na.rm = TRUE)
 
 # calculates the median international bitterness unit for each state
-median(Beers$IBU,na.rm = TRUE)
+#median(Beers$IBU,na.rm = TRUE)
 
+#
+# 1. Use the aggregate function to get summary statistics (median) for each state. 
+# 2. Make ABV as percentage 
+# 3. Set the column names for the results
+# 4. display top 6 rows before plot
+#
+states.medians <- aggregate(Beers.Breweries[, 4:5], list(Beers.Breweries$StateName), median, na.rm=TRUE)
+states.medians$ABVPercent <- paste(round(100*states.medians$ABV, 2), "%", sep="")
+names(states.medians) <- c("StateName", "ABV", "IBU", "ABVP")
+states.medians$IBU[is.na(states.medians$IBU)] <- 0
+kable(head(states.medians[, c(1, 3:4)]))
 
+#
+# Plot a bar chart for ABV and IBU to compare all the states. It is better to prepare a table for the bar chart functions of the
+# values we want to see.
+#
+library(data.table)
+library(ggplot2)
+
+ibu.table <- setDT(states.medians[, c(1, 3)])
+
+par(mar=c(7, 5, 1, 0))
+barplot(ibu.table$IBU[1:27] , border=F , names.arg=ibu.table$StateName[1:27], las=2, ylim=c(0,65), xlim=c(0, 40), width=1.5, main="Median IBU by State", col="green", ylab="IBU")
+barplot(ibu.table$IBU[28:51] , border=F , names.arg=ibu.table$StateName[28:51], las=2, ylim=c(0,65), xlim=c(0, 40), width=1.5, main="Median IBU by State", col="green", ylab="IBU")
+
+abvp.table <- setDT(states.medians[, c(1, 2)])
+
+barplot(abvp.table$ABV[1:27] , border=F , names.arg=ibu.table$StateName[1:27], las=2, ylim=c(0,0.07), xlim=c(0, 40), width=1.5, main="Median ABV% by State", col="blue", ylab="ABV %")
+barplot(abvp.table$ABV[28:51] , border=F , names.arg=ibu.table$StateName[28:51], las=2, ylim=c(0,0.07), xlim=c(0, 40), width=1.5, main="Median ABV% by State", col="blue", ylab="ABV %")
 ```
-###
-Compute the median alcohol content and international
-bitterness unit for each state. Plot a bar chart to compare.
+
 
 ```{r}
 library(scatterplot3d) # Selwyn - Added library
