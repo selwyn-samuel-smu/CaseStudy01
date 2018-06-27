@@ -9,15 +9,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
-Introduction about the project 
+###Introduction about the project 
 
-### This project is analytical study of beer and breweries distribution across the united states and their corresponding alcholic content and bittterness level 
+**Alcohol, Tobacco and Firearms (ATF) -  Quality Control Case Study**
 
-##End Client : Zamy pharmaceutical
+ATF is conducting quarterly review of the beers and breweries across the various states in the US. The study team was given a set of data about the beers and the breweries. As part of the analysis the team studied the data from various angles to provide valuable insight into the data.
 
-### Zamy pharmaceutical is working on a project in designing hangover pills targeting after beer headaches and mood swings and wanted to study the alcohol content of beers sold in the united states, the chemical metrics of bitterness and alcohol content and target what threshold of alcohol content can be subdued by the supposed after beer pill. It's a preliminary study used as an input of zany's chemists to design multi layer and multiple dose pills depending on average alcohol consumption and mean distribution.
+Quarterly ATF review includes the following:
 
-The study team was given a set of data about the beers and the breweries. As part of the analysis the team studied the data from various angles to provide valuable insight into the data.
+* Number of breweries per state
+* Statistics on alcohol by volume (ABV) and international bitterness unit (IBU) per state
+* State with highest alcohol content and IBU 
+* Correlation between the two attributes to ensure production quality
 
 
 ```{r }
@@ -37,7 +40,7 @@ site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/
 localsite <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Beers.csv"
   
 #download.file(site,destfile ="./Beers.csv ") - Selwyn - Commented the code as we do not need to download to local disk
-Beers <- read.csv(site)
+Beers <- read.csv(localsite)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 str(Beers)
 dim(Beers)
@@ -47,7 +50,7 @@ names(Beers)
 site2 <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv"
 localsite2 <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Breweries.csv"
 #download.file(site,destfile ="./Breweries.csv ") - Selwyn - Commented the code as we do not need to download the file to local disk
-Breweries<- read.csv(site2)
+Breweries<- read.csv(localsite2)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 
 str(Breweries)
@@ -155,6 +158,7 @@ kable(count.nas, format="html", caption = "Number of NAs for each column")
 
 ```
 $~$
+
 The displayed tables shows that the Alcohol By Volume (ABV) and International Bitterness Units (IBU) columns are the only ones that have the missing data. When we need to run statistics functions on these columns, we need to be aware of the missing columns and provide appropriate function parameters to handle missing data.
 
 $~$
@@ -178,13 +182,17 @@ Bar charts are widely used by statistians to compare exploratory variables and r
 #
 states.medians <- aggregate(Beers.Breweries[, 4:5], list(Beers.Breweries$StateName), median, na.rm=TRUE)
 states.medians$ABVPercent <- paste(round(100*states.medians$ABV, 2), "%", sep="")
+
 names(states.medians) <- c("StateName", "ABV", "IBU", "ABVP")
 states.medians$IBU[is.na(states.medians$IBU)] <- 0
+
 kable(head(states.medians[, c(1, 3:4)]))
 
 #
 # Plot a bar chart for ABV and IBU to compare all the states. It is better to prepare a table for the bar chart functions of the
 # values we want to see.
+# 1. Convert the data frame to a table for use in barplot
+# 2. Since we have 51 entries in the table, split them and display in two bar charts for better look
 #
 library(data.table)
 library(ggplot2)
@@ -200,37 +208,51 @@ abvp.table <- setDT(states.medians[, c(1, 2)])
 barplot(abvp.table$ABV[1:27] , border=F , names.arg=ibu.table$StateName[1:27], las=2, ylim=c(0,0.07), xlim=c(0, 40), width=1.5, main="Median ABV% by State", col="blue", ylab="ABV %")
 barplot(abvp.table$ABV[28:51] , border=F , names.arg=ibu.table$StateName[28:51], las=2, ylim=c(0,0.07), xlim=c(0, 40), width=1.5, main="Median ABV% by State (Continued)", col="blue", ylab="ABV %")
 ```
+$~$
+
+Comparing the bar charts for the Alcohol By Volume (ABV) and International Bitterness Units (IBU), there is more variations in the medians for IBU among the states compared the variations of the medians for ABV.
 
 
+###Question: 5. Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 
+AS part of the study, the team wanted to do more analysis on the characteristics of the beers produced by each state. Especially, they wanted to find out which state produced the beer with the most alchohol content and which state produced the most bitter beer.
+
+**State with the beer that has the maximum ABV**
 ```{r}
-library(scatterplot3d) # Selwyn - Added library
+#
+# Get the state with the maximum ABV beer
+#
+max.abv <- subset(Beers.Breweries, ABV == max(Beers.Breweries$ABV, na.rm = T))
+max.abv$ABVP <- paste(round(100*max.abv$ABV, 2), "%", sep="")
+kable(max.abv[,c("StateName", "Beer", "ABVP")])
+```
+$~$
 
-plot(Beers$IBU,Beers$ABV,main="Beer Alcohol Content and Bitterness level contrast",col="blue", xlim=c(0,150),ylim = c(0,0.13))
-
-scatterplot3d(Beers$Beer_ID, Beers$ABV,Beers$IBU,main="Beer Alcohol Content and Bitterness level contrast",xlab = "Beer_ID", xlim =c(0,2500),ylab = "ABV",ylim=c(0,0.13),zlab = "IBU " ,angle = 55,pch = 16, color="steelblue")
-
-length(Beers$Beer_ID[!is.na(Beers$Beer_ID)])
+**State with the beer that has the maximum bitterness**
+```{r}
+#
+# Get the state with the most bitter beer
+#
+max.ibu <- subset(Beers.Breweries, IBU == max(Beers.Breweries$IBU, na.rm = T))
+kable(max.ibu[,c("StateName", "Beer", "IBU")])
 
 ```
-### Which state has the maximum alcoholic (ABV) beer? Which
-state has the most bitter (IBU) beer?
+
+The study team had several smart R programmers. They found an alternative way of arriving at the same result :)
 
 ```{r}
+
 max(Beers$ABV,na.rm = TRUE)
-min(Beers$ABV,na.rm = TRUE)
+#min(Beers$ABV,na.rm = TRUE)
 
 max(Beers$IBU,na.rm = TRUE)
-min(Beers$IBU,na.rm = TRUE)
-```
-### using indexing in r or using SQL library  
-```{r}
+#min(Beers$IBU,na.rm = TRUE)
 
-names(Beers)
-names(Breweries)
-Beers$Beer_ID
-Beers$Brewery_id
-Breweries$Brew_ID
+#names(Beers)
+#names(Breweries)
+#Beers$Beer_ID
+#Beers$Brewery_id
+#Breweries$Brew_ID
 ### Hence based on the vector comparison the coloumn names Brewery_ID and Brew_ID are the common coloumns where the data frame merge or join is done
 
 library(sqldf)
@@ -251,13 +273,31 @@ sqldf("SELECT State FROM Breweries WHERE Brew_id=375")
 sqldf("SELECT State FROM Breweries WHERE Brew_id=(SELECT Brewery_id FROM Beers WHERE IBU=(SELECT MAX(IBU)from Beers))")
 ## Hence based on the analysis Oregon has the most bitter Beer
 ```
+$~$
 
-###Summary statistics for the ABV variable.
+
+###Question: 6. Summary statistics for the ABV variable
+
 ```{r}
 library(pastecs)
 #stat.desc(Beers$ABV,BASIC=F) -Selwyn (Removed BASIC=F as it was giving an error "Unused argument")
 stat.desc(Beers$ABV)
+summary(Beers$ABV)
 ```
+
+
+```{r}
+library(scatterplot3d) # Selwyn - Added library
+
+plot(Beers$IBU,Beers$ABV,main="Beer Alcohol Content and Bitterness level contrast",col="blue", xlim=c(0,150),ylim = c(0,0.13))
+
+scatterplot3d(Beers$Beer_ID, Beers$ABV,Beers$IBU,main="Beer Alcohol Content and Bitterness level contrast",xlab = "Beer_ID", xlim =c(0,2500),ylab = "ABV",ylim=c(0,0.13),zlab = "IBU " ,angle = 55,pch = 16, color="steelblue")
+
+length(Beers$Beer_ID[!is.na(Beers$Beer_ID)])
+
+```
+
+
 ### Is there an apparent relationship between the bitterness of the
 beer and its alcoholic content? Draw a scatter plot.
 
