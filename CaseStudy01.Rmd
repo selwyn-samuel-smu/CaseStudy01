@@ -280,6 +280,8 @@ $~$
 
 One of the goals of the study group is to find more information about the alchohol by volume charateristic of all the beers that are sold in all the states. The team leveraged the built-in functions in R language to highlight the various aspects of the ABV characteristics.
 
+The group found out some interesting statistics about the ABV content of beers sold in all the states combined. The following tbale shows the various summary statistics along with the values.
+
 ```{r}
 library(pastecs)
 #stat.desc(Beers$ABV,BASIC=F) -Selwyn (Removed BASIC=F as it was giving an error "Unused argument")
@@ -287,30 +289,31 @@ ss <- stat.desc(Beers$ABV)
 names(ss) <- c("Number of Values", "Number of Null values", "Number of NAs", "Minimum", "Maximum", "Range", "Sum", "Median", "Mean", "Standard Error", "95% Confidence Interval", "Variance", "Standard Deviation", "Coefficient of Variance")
 kable(ss, caption="Summary Statistics for Alcohol by Volume", col.names = "Value")
 ```
+$~$
 
+
+###Question: 7. Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
+
+Finally, the team was asked to find out if there is any relationship that exists between the bitterness of the beer and its alcohol content. 
 
 ```{r}
 library(scatterplot3d) # Selwyn - Added library
 
-plot(Beers$IBU,Beers$ABV,main="Beer Alcohol Content and Bitterness level contrast",col="blue", xlim=c(0,150),ylim = c(0,0.13))
+#
+# Scatter plots using the various R libraries
+#
+
+plot(Beers$IBU, Beers$ABV, main="Beer Alcohol Content and Bitterness level contrast", col="blue", xlim=c(0,150), ylim = c(0,0.13), xlab = "International Bitterness Unit (IBU)", ylab = "Alcohol by Volume")
 
 scatterplot3d(Beers$Beer_ID, Beers$ABV,Beers$IBU,main="Beer Alcohol Content and Bitterness level contrast",xlab = "Beer_ID", xlim =c(0,2500),ylab = "ABV",ylim=c(0,0.13),zlab = "IBU " ,angle = 55,pch = 16, color="steelblue")
 
-length(Beers$Beer_ID[!is.na(Beers$Beer_ID)])
-
+p <- ggplot(Beers.Breweries, aes(IBU, ABV))
+p + geom_point(na.rm = TRUE, colour="red")
 ```
+$~$
 
+Based on the scatter plots, we can see a slight postive relationship between the bitterness of the beer and the alcohol content. Even though the relationship is not direct, there is a slight trend of increasing bitterness leading to increasing alcohol content. 
 
-### Is there an apparent relationship between the bitterness of the
-beer and its alcoholic content? Draw a scatter plot.
-
-```{r}
-plot(Beers$IBU,Beers$ABV,main="Beer Alcohol Content and Bitterness level contrast",col="blue",xlab="IBU", ylab="Alcholic Content per bottle", xlim=c(0,150),ylim = c(0,0.13))
-
-library(ggplot2)
-## Reference https://www.craftbeer.com/craft-beer-muses/craft-beer-by-the-numbers
-## It looks like there are other confounding varriables ,that can give a complete picture and I dont see a direct correlation between IBU and AbV
-```
 
 ### The Beers dataset contains a list of 2410 US craft beers and Breweries dataset contains 558 US breweries. The datasets descriptions are as follows.
 
