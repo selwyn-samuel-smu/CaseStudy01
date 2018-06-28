@@ -40,7 +40,7 @@ site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/
 localsite <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Beers.csv"
   
 #download.file(site,destfile ="./Beers.csv ") - Selwyn - Commented the code as we do not need to download to local disk
-Beers <- read.csv(site)
+Beers <- read.csv(localsite)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 str(Beers)
 dim(Beers)
@@ -50,7 +50,7 @@ names(Beers)
 site2 <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv"
 localsite2 <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Breweries.csv"
 #download.file(site,destfile ="./Breweries.csv ") - Selwyn - Commented the code as we do not need to download the file to local disk
-Breweries<- read.csv(site2)
+Breweries<- read.csv(localsite2)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 
 str(Breweries)
