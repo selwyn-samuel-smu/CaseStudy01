@@ -329,7 +329,7 @@ attr(Beers$IBU, "shortDescription") <- "International Bitterness Units of the be
 attr(Beers$Brewery_id, "shortDescription") <- "Unique identifier of the brewery that brewed the beer"
 attr(Beers$Style, "shortDescription") <- "Style of the beer"
 attr(Beers$Ounces, "shortDescription") <- "Ounces of beer"
-makeCodebook(Beers, reportTitle = "Table for beers brewed in the United States of America.")
+#makeCodebook(Beers, reportTitle = "Table for beers brewed in the United States of America.")
 
 
 attr(Breweries, "labels") <- "The table contains the data collected about the breweries in the United States."
@@ -337,6 +337,6 @@ attr(Breweries$Name, "shortDescription") <- "Name of the brewery"
 attr(Breweries$Brew_ID, "shortDescription") <- "Unique identifier of the brewery"
 attr(Breweries$City, "shortDescription") <- "City in which the brewery is located"
 attr(Breweries$State, "shortDescription") <- "State in which the brewery is located"
-makeCodebook(Breweries, reportTitle = "Table for breweries in the United States of America.")
+#makeCodebook(Breweries, reportTitle = "Table for breweries in the United States of America.")
 
 ```

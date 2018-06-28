@@ -154,7 +154,7 @@ site &lt;- &quot;https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01
 localsite &lt;- &quot;C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Beers.csv&quot;
   
 #download.file(site,destfile =&quot;./Beers.csv &quot;) - Selwyn - Commented the code as we do not need to download to local disk
-Beers &lt;- read.csv(localsite)
+Beers &lt;- read.csv(site)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 str(Beers)</code></pre>
 <pre><code>## 'data.frame':    2410 obs. of  7 variables:
@@ -173,7 +173,7 @@ str(Beers)</code></pre>
 <pre class="r"><code>site2 &lt;- &quot;https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv&quot;
 localsite2 &lt;- &quot;C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Breweries.csv&quot;
 #download.file(site,destfile =&quot;./Breweries.csv &quot;) - Selwyn - Commented the code as we do not need to download the file to local disk
-Breweries&lt;- read.csv(localsite2)
+Breweries&lt;- read.csv(site2)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 
 str(Breweries)</code></pre>
@@ -1305,53 +1305,23 @@ p + geom_point(na.rm = TRUE, colour=&quot;red&quot;) + geom_smooth() </code></pr
 #
 library(dataMaid)
 
-attr(Beers, &quot;labels&quot;) &lt;- &quot;The table contains the data collected about the beers that are brewed in the United States..&quot;
+attr(Beers, &quot;labels&quot;) &lt;- &quot;The table contains the data collected about the beers that are brewed in the United States.&quot;
 attr(Beers$Name, &quot;shortDescription&quot;) &lt;- &quot;Name of the beer&quot;
 attr(Beers$Beer_ID, &quot;shortDescription&quot;) &lt;- &quot;Unique identifier of the beer&quot;
 attr(Beers$ABV, &quot;shortDescription&quot;) &lt;- &quot;Alcohol by volume of the beer&quot;
 attr(Beers$IBU, &quot;shortDescription&quot;) &lt;- &quot;International Bitterness Units of the beer&quot;
 attr(Beers$Brewery_id, &quot;shortDescription&quot;) &lt;- &quot;Unique identifier of the brewery that brewed the beer&quot;
 attr(Beers$Style, &quot;shortDescription&quot;) &lt;- &quot;Style of the beer&quot;
-attr(Beers$Ounces, &quot;shortDescription&quot;) &lt;- &quot;Ounces of beer&quot;</code></pre>
-</div>
-<div id="beers.csvattributes" class="section level3">
-<h3>Beers.csv:Attributes</h3>
-<div id="name-name-of-the-beer." class="section level4">
-<h4>Name: Name of the beer.</h4>
-</div>
-<div id="beer_id-unique-identifier-of-the-beer." class="section level4">
-<h4>Beer_ID: Unique identifier of the beer.</h4>
-</div>
-<div id="abv-alcohol-by-volume-of-the-beer." class="section level4">
-<h4>ABV: Alcohol by volume of the beer.</h4>
-</div>
-<div id="ibu-international-bitterness-units-of-the-beer." class="section level4">
-<h4>IBU: International Bitterness Units of the beer.</h4>
-</div>
-<div id="brewery_id-brewery_id." class="section level4">
-<h4>Brewery_ID: Brewery_ID.</h4>
-</div>
-<div id="style-style-of-the-beer." class="section level4">
-<h4>Style: Style of the beer.</h4>
-</div>
-<div id="ounces-ounces-of-beer." class="section level4">
-<h4>Ounces: Ounces of beer.</h4>
-</div>
-</div>
-<div id="breweries.csvattributes" class="section level3">
-<h3>Breweries.csv:Attributes</h3>
-<div id="brew_id-unique-identifier-of-the-brewery." class="section level4">
-<h4>Brew_ID: Unique identifier of the brewery.</h4>
-</div>
-<div id="name-name-of-the-brewery." class="section level4">
-<h4>Name: Name of the brewery.</h4>
-</div>
-<div id="city-city-where-the-brewery-is-located." class="section level4">
-<h4>City: City where the brewery is located.</h4>
-</div>
-<div id="state-u.s.-state-where-the-brewery-is-located." class="section level4">
-<h4>State: U.S. State where the brewery is located.</h4>
-</div>
+attr(Beers$Ounces, &quot;shortDescription&quot;) &lt;- &quot;Ounces of beer&quot;
+#makeCodebook(Beers, reportTitle = &quot;Table for beers brewed in the United States of America.&quot;)
+
+
+attr(Breweries, &quot;labels&quot;) &lt;- &quot;The table contains the data collected about the breweries in the United States.&quot;
+attr(Breweries$Name, &quot;shortDescription&quot;) &lt;- &quot;Name of the brewery&quot;
+attr(Breweries$Brew_ID, &quot;shortDescription&quot;) &lt;- &quot;Unique identifier of the brewery&quot;
+attr(Breweries$City, &quot;shortDescription&quot;) &lt;- &quot;City in which the brewery is located&quot;
+attr(Breweries$State, &quot;shortDescription&quot;) &lt;- &quot;State in which the brewery is located&quot;
+#makeCodebook(Breweries, reportTitle = &quot;Table for breweries in the United States of America.&quot;)</code></pre>
 </div>
 
 
