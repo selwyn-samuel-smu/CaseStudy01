@@ -40,7 +40,7 @@ site <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/
 localsite <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Beers.csv"
   
 #download.file(site,destfile ="./Beers.csv ") - Selwyn - Commented the code as we do not need to download to local disk
-Beers <- read.csv(localsite)
+Beers <- read.csv(site)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 str(Beers)
 dim(Beers)
@@ -50,7 +50,7 @@ names(Beers)
 site2 <- "https://raw.githubusercontent.com/selwyn-samuel-smu/CaseStudy01/master/Breweries.csv"
 localsite2 <- "C:/SMU/Courses/MSDS 6306 - DoingDataScience/github/casestudy1/CaseStudy01/Breweries.csv"
 #download.file(site,destfile ="./Breweries.csv ") - Selwyn - Commented the code as we do not need to download the file to local disk
-Breweries<- read.csv(localsite2)
+Breweries<- read.csv(site2)
 #list.files() - Selwyn - Commented the code as we do not need to download the file to local disk
 
 str(Breweries)
@@ -308,28 +308,35 @@ plot(Beers$IBU, Beers$ABV, main="Beer Alcohol Content and Bitterness level contr
 scatterplot3d(Beers$Beer_ID, Beers$ABV,Beers$IBU,main="Beer Alcohol Content and Bitterness level contrast",xlab = "Beer_ID", xlim =c(0,2500),ylab = "ABV",ylim=c(0,0.13),zlab = "IBU " ,angle = 55,pch = 16, color="steelblue")
 
 p <- ggplot(Beers.Breweries, aes(IBU, ABV))
-p + geom_point(na.rm = TRUE, colour="red")
+p + geom_point(na.rm = TRUE, colour="red") + geom_smooth() 
 ```
 $~$
 
 Based on the scatter plots, we can see a slight postive relationship between the bitterness of the beer and the alcohol content. Even though the relationship is not direct, there is a slight trend of increasing bitterness leading to increasing alcohol content. 
 
 
-### The Beers dataset contains a list of 2410 US craft beers and Breweries dataset contains 558 US breweries. The datasets descriptions are as follows.
+```{r}
+#
+# Generate codebook for the Beers and Breweries data structures
+#
+library(dataMaid)
 
-###Beers.csv:Attributes
+attr(Beers, "labels") <- "The table contains the data collected about the beers that are brewed in the United States."
+attr(Beers$Name, "shortDescription") <- "Name of the beer"
+attr(Beers$Beer_ID, "shortDescription") <- "Unique identifier of the beer"
+attr(Beers$ABV, "shortDescription") <- "Alcohol by volume of the beer"
+attr(Beers$IBU, "shortDescription") <- "International Bitterness Units of the beer"
+attr(Beers$Brewery_id, "shortDescription") <- "Unique identifier of the brewery that brewed the beer"
+attr(Beers$Style, "shortDescription") <- "Style of the beer"
+attr(Beers$Ounces, "shortDescription") <- "Ounces of beer"
+makeCodebook(Beers, reportTitle = "Table for beers brewed in the United States of America.")
 
-####Name: Name of the beer.
-####Beer_ID: Unique identifier of the beer.
-####ABV: Alcohol by volume of the beer.
-####IBU: International Bitterness Units of the beer.
-####Brewery_ID: Brewery id associated with the beer.
-####Style: Style of the beer.
-####Ounces: Ounces of beer.
 
-###Breweries.csv:Attributes
+attr(Breweries, "labels") <- "The table contains the data collected about the breweries in the United States."
+attr(Breweries$Name, "shortDescription") <- "Name of the brewery"
+attr(Breweries$Brew_ID, "shortDescription") <- "Unique identifier of the brewery"
+attr(Breweries$City, "shortDescription") <- "City in which the brewery is located"
+attr(Breweries$State, "shortDescription") <- "State in which the brewery is located"
+makeCodebook(Breweries, reportTitle = "Table for breweries in the United States of America.")
 
-####Brew_ID: Unique identifier of the brewery.
-####Name: Name of the brewery.
-####City: City where the brewery is located.
-####State: U.S. State where the brewery is located.
+```
